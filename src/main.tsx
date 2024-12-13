@@ -3,7 +3,7 @@ import * as THREE from 'three';
 
 const ThreeScene: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
-  const [pointPosition, setPointPosition] = useState<THREE.Vector3>(new THREE.Vector3(0, 0, 0)); 
+  //const [pointPosition, setPointPosition] = useState<THREE.Vector3>(new THREE.Vector3(0, 0, 0)); 
 
   useEffect(() => {
     if (!containerRef.current) return;
