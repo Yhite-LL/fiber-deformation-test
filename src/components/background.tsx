@@ -16,13 +16,25 @@ const ThreeScene: React.FC = () => {
       const workbook = XLSX.read(arrayBuffer, { type: 'array' });
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
       const data = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-      setPointsData(data.slice(1)); // 从第二行开始读取数据
-      setZeroPoints(data.slice(1).filter((row: any[]) => row[0] === 0)); // 过滤第一项为0的点
+
+      // 根据第一项的值划分为不同的子数组
+      const groupedData = data.slice(1).reduce((acc: any, row: any[]) => {
+        const key = row[0];
+        if (!acc[key]) {
+          acc[key] = [];
+        }
+        acc[key].push(row);
+        return acc;
+      }, {});
+
+      console.log(groupedData)
+
+      setPointsData(groupedData);
+      setZeroPoints(groupedData[0] || []); // 过滤第一项为0的点
     };
 
     fetchData();
   }, []);
-
   useEffect(() => {
     if (!containerRef.current || pointsData.length === 0) return;
 
@@ -98,26 +110,22 @@ const ThreeScene: React.FC = () => {
       return zeroPoint;
     });
 
+    let flag = 0;
+
     const animate = () => {
-      requestAnimationFrame(animate);
+      // requestAnimationFrame(animate);
 
-      const time = Date.now() * 0.001;
-      const currentIndex = Math.floor(time) % pointsData.length;
-      const [_, x, y, z, displacement] = pointsData[currentIndex];
-
-      point.position.set(x, z, y);
-      newPoint.position.set(x , z + displacement*10, y );
-      
       zeroPointsMeshes.forEach((mesh, index) => {
-        const [_, zx, zy, zz, zDisplacement] = zeroPoints[index];
-        mesh.position.set(zx , zz + displacement*10, zy );
-      });
-      
-      renderer.render(scene, camera);
+        const [_, zx, zy, zz, displacement] = pointsData[flag][index];
 
+        mesh.position.set(zx, zz + displacement * 10, zy);
+      });
+
+      renderer.render(scene, camera);
     };
 
-    animate();
+    if(flag < 40)
+      setInterval(() => { animate();flag++; }, 1000);
 
     return () => {
       renderer.dispose();
