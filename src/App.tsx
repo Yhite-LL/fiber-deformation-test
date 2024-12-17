@@ -1,12 +1,12 @@
 import './App.css'
-import ThreeScene from './main'
+import ThreeScene from './components/main'
 
 function App() {
 
   return (
-    <>
+    <div>
       <ThreeScene></ThreeScene>
-    </>
+    </div>
   )
 }
 

@@ -1,7 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 const ThreeScene: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -67,8 +66,6 @@ const ThreeScene: React.FC = () => {
     light.shadow.bias = -0.000222;
     light.shadow.mapSize.width = 1024;
     light.shadow.mapSize.height = 1024;
-
-
 
     //视角的转动
     const controls = new OrbitControls(camera, renderer.domElement);
