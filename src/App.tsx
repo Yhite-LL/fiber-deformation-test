@@ -1,5 +1,5 @@
 import './App.css'
-import ThreeScene from './components/main'
+import ThreeScene from './components/background'
 
 function App() {
 

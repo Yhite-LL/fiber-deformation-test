@@ -1,7 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';  // 使用 React 18 的新的 API
 import App from './App';
-import './index.css';
 
 // 获取 id 为 'root' 的 DOM 元素并确保它存在
 const rootElement = document.getElementById('root');
