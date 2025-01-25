@@ -2,11 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';  // 使用 React 18 的新的 API
 import './App.css';
 import ThreeScene from './components/background';
+import SideMenu from './components/SideMemu';
+import  Modal from './components/modal';
 
 function App() {
   return (
-    <div>
-      <ThreeScene></ThreeScene>
+    <div className='App'>
+      <div className='column left-column'>
+        <ThreeScene />
+      </div>
+      {/* <Modal isShow={true} x={10} y={10} z={10} offset={20} width={200} height={200}></Modal> */}
+      <div className='column right-column'>
+        <SideMenu points={100} length={10} magnification={10}/>
+      </div>
     </div>
   );
 }
