@@ -3,22 +3,17 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as XLSX from "xlsx";
 
-const frameInterval = 1000 / 20;
+const frameInterval = 1000 / 20; // 这里调整动画帧率，每帧的时间间隔，60帧每秒
 
 const ThreeScene: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [pointsData, setPointsData] = useState<any[]>([]);
   const [zeroPoints, setZeroPoints] = useState<any[]>([]);
-  const [selectedPoint, setSelectedPoint] = useState<{
-    x: number;
-    y: number;
-    z: number;
-    info: any;
-  } | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       const response = await fetch("/data/两端固定.xlsx");
+      // const response = await fetch('/data/四段固定.xlsx');
       const arrayBuffer = await response.arrayBuffer();
       const workbook = XLSX.read(arrayBuffer, { type: "array" });
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -42,6 +37,8 @@ const ThreeScene: React.FC = () => {
 
   const initScene = useCallback(() => {
     if (!containerRef.current || pointsData.length === 0) return;
+
+    // 清除旧的内容
     while (containerRef.current.firstChild) {
       containerRef.current.removeChild(containerRef.current.firstChild);
     }
@@ -50,10 +47,42 @@ const ThreeScene: React.FC = () => {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xeeeeee);
 
+    // 渲染器
     const renderer = new THREE.WebGLRenderer();
     renderer.setSize(container.offsetWidth, container.offsetHeight);
     renderer.shadowMap.enabled = true;
     container.appendChild(renderer.domElement);
+
+    const planeGeometry = new THREE.PlaneGeometry(10, 10);
+    planeGeometry.rotateX(-Math.PI / 2);
+    const planeMaterial = new THREE.ShadowMaterial({
+      color: 0x000000,
+      opacity: 0.5,
+    });
+    const plane = new THREE.Mesh(planeGeometry, planeMaterial);
+    plane.position.y = -20;
+    plane.receiveShadow = true;
+    scene.add(plane);
+
+    const helper = new THREE.GridHelper(1000, 1000);
+    helper.position.y = -10;
+    helper.material.opacity = 0.25;
+    helper.material.transparent = true;
+    scene.add(helper);
+
+    scene.add(new THREE.AmbientLight(0xf0f0f0, 3));
+
+    const light = new THREE.SpotLight(0xffffff, 4.5);
+    light.position.set(0, 10, 200);
+    light.angle = Math.PI * 0.2;
+    light.decay = 0;
+    light.castShadow = true;
+    light.shadow.camera.near = 200;
+    light.shadow.camera.far = 1000;
+    light.shadow.bias = -0.000222;
+    light.shadow.mapSize.width = 1024;
+    light.shadow.mapSize.height = 1024;
+    scene.add(light);
 
     const camera = new THREE.PerspectiveCamera(
       70,
@@ -70,7 +99,7 @@ const ThreeScene: React.FC = () => {
     controls.screenSpacePanning = false;
     controls.maxPolarAngle = Math.PI / 2;
 
-    const zeroPointsMeshes = zeroPoints.map((_, index) => {
+    const zeroPointsMeshes = zeroPoints.map(() => {
       const zeroGeometry = new THREE.SphereGeometry(0.5, 32, 32);
       const zeroMaterial = new THREE.MeshStandardMaterial({ color: 0x0000ff });
       const zeroPoint = new THREE.Mesh(zeroGeometry, zeroMaterial);
@@ -78,21 +107,16 @@ const ThreeScene: React.FC = () => {
       return zeroPoint;
     });
 
-    // 添加一个固定显示的框
-    const boxGeometry = new THREE.BoxGeometry(5, 5, 5);
-    const boxMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
-    const edges = new THREE.EdgesGeometry(boxGeometry);
-    const boxFrame = new THREE.LineSegments(edges, boxMaterial);
-    scene.add(boxFrame);
-
     let flag = 0;
     let lastTime = 0;
+
     const animate = (time: number) => {
       if (time - lastTime >= frameInterval) {
         zeroPointsMeshes.forEach((mesh, index) => {
           const [_, zx, zy, zz, displacement] = pointsData[flag][index];
           mesh.position.set(zx, zz + displacement * 10, zy);
         });
+
         renderer.render(scene, camera);
         lastTime = time;
         if (flag < 40) {
@@ -101,13 +125,14 @@ const ThreeScene: React.FC = () => {
       }
       requestAnimationFrame(animate);
     };
+
     requestAnimationFrame(animate);
 
-    // 鼠标点击事件
+    // 鼠标事件
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
-    const onMouseClick = (event: MouseEvent) => {
+    const onMouseMove = (event: MouseEvent) => {
       const rect = renderer.domElement.getBoundingClientRect();
       mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
@@ -116,27 +141,18 @@ const ThreeScene: React.FC = () => {
       const intersects = raycaster.intersectObjects(zeroPointsMeshes);
 
       if (intersects.length > 0) {
-        const intersected = intersects[0].object as THREE.Mesh;
-        const index = zeroPointsMeshes.indexOf(intersected);
-        if (index !== -1) {
-          const [_, zx, zy, zz, displacement] = pointsData[flag][index];
-          setSelectedPoint({
-            x: zx,
-            y: zz + displacement * 10,
-            z: zy,
-            info: pointsData[flag][index],
-          });
-          boxFrame.position.set(zx, zz + displacement * 10, zy);
-        }
+        container.style.cursor = "pointer"; // 鼠标悬停在点上时设置为手形
+      } else {
+        container.style.cursor = "default"; // 恢复为默认光标
       }
     };
 
-    renderer.domElement.addEventListener("click", onMouseClick);
+    renderer.domElement.addEventListener("mousemove", onMouseMove);
 
     return () => {
       renderer.dispose();
-      boxGeometry.dispose();
-      boxMaterial.dispose();
+      planeGeometry.dispose();
+      planeMaterial.dispose();
       zeroPointsMeshes.forEach((mesh) => {
         mesh.geometry.dispose();
         mesh.material.dispose();
@@ -150,29 +166,7 @@ const ThreeScene: React.FC = () => {
   }, [initScene]);
 
   return (
-    <div
-      ref={containerRef}
-      style={{ width: "100%", height: "100%", position: "relative" }}
-    >
-      {selectedPoint && (
-        <div
-          style={{
-            position: "absolute",
-            top: "10px",
-            right: "10px",
-            padding: "10px",
-            background: "rgba(0,0,0,0.7)",
-            color: "white",
-            borderRadius: "5px",
-          }}
-        >
-          <p>X: {selectedPoint.x.toFixed(2)}</p>
-          <p>Y: {selectedPoint.y.toFixed(2)}</p>
-          <p>Z: {selectedPoint.z.toFixed(2)}</p>
-          <p>Info: {JSON.stringify(selectedPoint.info)}</p>
-        </div>
-      )}
-    </div>
+    <div ref={containerRef} style={{ width: "100%", height: "100%" }}></div>
   );
 };
 
