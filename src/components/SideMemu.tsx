@@ -6,9 +6,10 @@ interface SideMenuProps {
     onLengthChange: (length: number) => void;
     magnification: number;
     onMagnificationChange: (magnification: number) => void;
+    onStartSimulation: () => void; // 添加这个回调函数
 }
 
-const SideMenu: React.FC<SideMenuProps> = ({ points, length, onLengthChange, magnification, onMagnificationChange }) => {
+const SideMenu: React.FC<SideMenuProps> = ({ points, length, onLengthChange, magnification, onMagnificationChange,onStartSimulation }) => {
     const [inputLength, setInputLength] = useState(length);
     const [selectedMagnification, setSelectedMagnification] = useState(magnification);
 
@@ -56,10 +57,10 @@ const SideMenu: React.FC<SideMenuProps> = ({ points, length, onLengthChange, mag
             <div style={styles.row}>
                 <button onClick={() => document.getElementById('fileInput')?.click()} style={styles.button}>选择数据源</button>
                 <input id="fileInput" type="file" style={{ display: 'none' }} onChange={handleFileSelect} />
-                <button style={{ ...styles.button, marginLeft: '10px' }}>确认参数</button>
+                <button style={{ ...styles.button, marginLeft: '10px' }}>修改参数</button>
             </div>
             <div style={styles.row}>
-                <button style={styles.button}>开始模拟</button>
+                <button style={styles.button}  onClick={onStartSimulation} >开始模拟</button>
             </div>
         </div>
     );

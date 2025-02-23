@@ -3,9 +3,14 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import * as XLSX from "xlsx";
 
+
+interface ThreeSceneProps {
+  isSimulationStarted: boolean;
+}
+
 const frameInterval = 1000 / 20;
 
-const ThreeScene: React.FC = () => {
+const ThreeScene: React.FC<ThreeSceneProps> = ({isSimulationStarted}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [pointsData, setPointsData] = useState<any[]>([]);
   const [zeroPoints, setZeroPoints] = useState<any[]>([]);
@@ -110,7 +115,10 @@ const ThreeScene: React.FC = () => {
       }
       requestAnimationFrame(animate);
     };
-    requestAnimationFrame(animate);
+    if (isSimulationStarted) {
+      requestAnimationFrame(animate);
+    }
+
 
     // 鼠标点击事件
     const raycaster = new THREE.Raycaster();
@@ -151,7 +159,7 @@ const ThreeScene: React.FC = () => {
         mesh.material.dispose();
       });
     };
-  }, [pointsData, zeroPoints]);
+  }, [pointsData, zeroPoints,isSimulationStarted]);
 
   useEffect(() => {
     const cleanup = initScene();
