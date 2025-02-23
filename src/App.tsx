@@ -9,6 +9,7 @@ import Modal from "./components/modal";
 function App() {
 
   const [isSimulationStarted, setIsSimulationStarted] = useState(false);
+  const [magnification, setMagnification] = useState(1000000); // 默认放大倍率
 
   const handleStartSimulation = () => {
     setIsSimulationStarted(true);
@@ -17,14 +18,15 @@ function App() {
   return (
     <div className="App">
       <div className="column left-column">
-        <ThreeScene isSimulationStarted={isSimulationStarted}/>
+        <ThreeScene isSimulationStarted={isSimulationStarted} magnification={magnification} />
       </div>
       {/* <Modal isShow={true} x={10} y={10} z={10} offset={20} width={200} height={200}></Modal> */}
       <div className="column right-column">
         <div>
-          <div style={{color:'black',height:'200px'}}>这里展示python绘制的画面</div>
+          <div style={{ color: 'black', height: '200px' }}>这里展示python绘制的画面</div>
         </div>
-        <SideMenu points={100} length={10} magnification={10} onStartSimulation={handleStartSimulation}/>
+        <SideMenu points={100} length={10} onStartSimulation={handleStartSimulation} magnification={magnification}
+          onMagnificationChange={(newMagnification: number)=>{setMagnification(newMagnification)}} />
       </div>
     </div>
   );

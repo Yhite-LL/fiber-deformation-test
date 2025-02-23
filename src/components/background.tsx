@@ -6,11 +6,12 @@ import * as XLSX from "xlsx";
 
 interface ThreeSceneProps {
   isSimulationStarted: boolean;
+  magnification: number; // 添加 magnification 属性
 }
 
-const frameInterval = 1000 / 20;
+const frameInterval = 1000 / 5;
 
-const ThreeScene: React.FC<ThreeSceneProps> = ({isSimulationStarted}) => {
+const ThreeScene: React.FC<ThreeSceneProps> = ({isSimulationStarted,magnification}) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [pointsData, setPointsData] = useState<any[]>([]);
   const [zeroPoints, setZeroPoints] = useState<any[]>([]);
@@ -94,10 +95,10 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({isSimulationStarted}) => {
     
     // 添加一个固定显示的框
     const boxGeometry = new THREE.BoxGeometry(5, 5, 5);
-    const boxMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
+    const boxMaterial = new THREE.LineBasicMaterial({ color: 0xffffff });
     const edges = new THREE.EdgesGeometry(boxGeometry);
     const boxFrame = new THREE.LineSegments(edges, boxMaterial);
-    scene.add(boxFrame);
+    // scene.add(boxFrame);
 
     let flag = 0;
     let lastTime = 0;
@@ -105,7 +106,7 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({isSimulationStarted}) => {
       if (time - lastTime >= frameInterval) {
         zeroPointsMeshes.forEach((mesh, index) => {
           const [_, zx, zy, zz, displacement] = pointsData[flag][index];
-          mesh.position.set(zx, zz + displacement * 1000000, zy);
+          mesh.position.set(zx, zz + displacement * magnification, zy);
         });
         renderer.render(scene, camera);
         lastTime = time;
@@ -139,11 +140,11 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({isSimulationStarted}) => {
           const [_, zx, zy, zz, displacement] = pointsData[flag][index];
           setSelectedPoint({
             x: zx,
-            y: zz + displacement * 10,
-            z: zy,
-            info: pointsData[flag][index],
+            y: zy,
+            z: zz + displacement * magnification,
+            info: pointsData[flag][index][4],
           });
-          boxFrame.position.set(zx, zz + displacement * 10, zy);
+          boxFrame.position.set(zx, zz + displacement * magnification, zy);
         }
       }
     };

@@ -11,7 +11,6 @@ interface SideMenuProps {
 
 const SideMenu: React.FC<SideMenuProps> = ({ points, length, onLengthChange, magnification, onMagnificationChange,onStartSimulation }) => {
     const [inputLength, setInputLength] = useState(length);
-    const [selectedMagnification, setSelectedMagnification] = useState(magnification);
 
     const handleLengthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const newLength = parseFloat(e.target.value);
@@ -21,7 +20,6 @@ const SideMenu: React.FC<SideMenuProps> = ({ points, length, onLengthChange, mag
 
     const handleMagnificationChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         const newMagnification = parseFloat(e.target.value);
-        setSelectedMagnification(newMagnification);
         onMagnificationChange(newMagnification);
     };
 
@@ -45,13 +43,13 @@ const SideMenu: React.FC<SideMenuProps> = ({ points, length, onLengthChange, mag
             </div>
             <div style={styles.row}>
                 <label style={styles.label}>放大倍率: </label>
-                <select value={selectedMagnification} onChange={handleMagnificationChange} style={styles.select}>
-                    <option value={0.1}>0.1</option>
-                    <option value={1}>1</option>
-                    <option value={10}>10</option>
-                    <option value={20}>20</option>
-                    <option value={30}>30</option>
-                    <option value={50}>50</option>
+                <select value={magnification} onChange={handleMagnificationChange} style={styles.select}>
+                    <option value={10000}>10000</option>
+                    <option value={500000}>500000</option>
+                    <option value={1000000}>1000000</option>
+                    <option value={2000000}>2000000</option>
+                    <option value={3000000}>3000000</option>
+                    <option value={4000000}>4000000</option>
                 </select>
             </div>
             <div style={styles.row}>
