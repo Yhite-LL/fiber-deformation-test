@@ -18,7 +18,7 @@ const ThreeScene: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch("/data/两端固定.xlsx");
+      const response = await fetch("/data/模态.xlsx");
       const arrayBuffer = await response.arrayBuffer();
       const workbook = XLSX.read(arrayBuffer, { type: "array" });
       const sheet = workbook.Sheets[workbook.SheetNames[0]];
@@ -29,9 +29,18 @@ const ThreeScene: React.FC = () => {
         if (!acc[key]) {
           acc[key] = [];
         }
-        acc[key].push(row);
+        // 将科学计数法表示的数字转换为浮点数
+        const convertedRow = row.map((cell: any) => {
+          if (typeof cell === 'string' && cell.match(/^[+-]?\d+(\.\d+)?([eE][+-]?\d+)?$/)) {
+            return parseFloat(cell);
+          }
+          return cell;
+        });
+        acc[key].push(convertedRow);
         return acc;
       }, {});
+
+      console.log(groupedData)
 
       setPointsData(groupedData);
       setZeroPoints(groupedData[0] || []);
@@ -77,7 +86,7 @@ const ThreeScene: React.FC = () => {
       scene.add(zeroPoint);
       return zeroPoint;
     });
-
+    
     // 添加一个固定显示的框
     const boxGeometry = new THREE.BoxGeometry(5, 5, 5);
     const boxMaterial = new THREE.LineBasicMaterial({ color: 0xff0000 });
@@ -91,11 +100,11 @@ const ThreeScene: React.FC = () => {
       if (time - lastTime >= frameInterval) {
         zeroPointsMeshes.forEach((mesh, index) => {
           const [_, zx, zy, zz, displacement] = pointsData[flag][index];
-          mesh.position.set(zx, zz + displacement * 10, zy);
+          mesh.position.set(zx, zz + displacement * 1000000, zy);
         });
         renderer.render(scene, camera);
         lastTime = time;
-        if (flag < 40) {
+        if (flag < 15) {
           flag++;
         }
       }

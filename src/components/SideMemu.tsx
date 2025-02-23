@@ -31,7 +31,6 @@ const SideMenu: React.FC<SideMenuProps> = ({ points, length, onLengthChange, mag
             // 处理文件
         }
     };
-
     return (
         <div style={styles.container}>
             <h2 style={styles.title}>参数配置</h2>
