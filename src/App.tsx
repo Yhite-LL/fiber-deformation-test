@@ -14,6 +14,9 @@ function App() {
       </div>
       {/* <Modal isShow={true} x={10} y={10} z={10} offset={20} width={200} height={200}></Modal> */}
       <div className="column right-column">
+        <div>
+          <div style={{color:'black',height:'200px'}}>这里展示python绘制的画面</div>
+        </div>
         <SideMenu points={100} length={10} magnification={10} />
       </div>
     </div>

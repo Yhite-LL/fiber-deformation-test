@@ -127,10 +127,10 @@ button:focus-visible {
 
 .left-column {
   background-color: #f0f0f0; /* 左列的背景颜色 */
-  width: 80%; /* 设置宽度为 70% */
+  flex:2; /* 设置宽度为 70% */
 }
 
 .right-column {
   background-color: #ffffff; /* 右列的背景颜色 */
-  flex:20%; /* 右列占 20% */
+  flex:1; /* 右列占 20% */
 }
