@@ -7,7 +7,7 @@ import { read, utils } from 'xlsx';
 interface ThreeSceneProps {
     isSimulationStarted: boolean;
     magnification: number;
-    confirmedMoment: Number;
+    confirmedMoment: number;
 }
 
 const frameInterval = 1000 / 20;
@@ -27,6 +27,8 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
         z: number;
         info: any;
     } | null>(null);
+    // 新增：用于存储选中点的数组
+    const [selectedPointsTable, setSelectedPointsTable] = useState<any[]>([]);
 
     // 异步获取数据
     useEffect(() => {
@@ -163,6 +165,16 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
                         info: pointsData[flag][index][4],
                     });
                     boxFrame.position.set(zx, zz + displacement * magnification, zy);
+                    // 新增：将选中点的应变大小添加到表格数组中
+                    setSelectedPointsTable(prevTable => [
+                        ...prevTable,
+                        {
+                            x: zx,
+                            y: zy,
+                            z: zz + displacement * magnification,
+                            displacement
+                        }
+                    ]);
                 }
             }
         };
@@ -190,6 +202,39 @@ const ThreeScene: React.FC<ThreeSceneProps> = ({
             ref={containerRef}
             style={{ width: "100%", height: "100%", position: "relative" }}
         >
+            {/* 新增：左上角的表格展示 */}
+            <div
+                style={{
+                    position: "absolute",
+                    top: "10px",
+                    left: "10px",
+                    padding: "10px",
+                    background: "rgba(0, 0, 0, 0.7)",
+                    color: "white",
+                    borderRadius: "5px",
+                }}
+            >
+                <table>
+                    <thead>
+                        <tr>
+                            <th>X</th>
+                            <th>Y</th>
+                            <th>Z</th>
+                            <th>应变大小</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {selectedPointsTable.map((point, index) => (
+                            <tr key={index}>
+                                <td>{point.x.toFixed(2)}</td>
+                                <td>{point.y.toFixed(2)}</td>
+                                <td>{point.z.toFixed(2)}</td>
+                                <td>{point.displacement.toFixed(2)}</td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
             {selectedPoint && (
                 <div
                     style={{
