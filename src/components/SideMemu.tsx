@@ -111,12 +111,12 @@ const SideMenu: React.FC<SideMenuProps> = ({
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
                 <label style={{ width: '100px', color: '#555', textAlign: 'right', marginRight: '10px' }}>放大倍率: </label>
                 <select value={magnification} onChange={handleMagnificationChange} style={{ padding: '8px', width: '150px', border: '1px solid #ccc', borderRadius: '4px' }}>
-                    <option value={10000}>10000</option>
-                    <option value={500000}>500000</option>
-                    <option value={1000000}>1000000</option>
-                    <option value={2000000}>2000000</option>
-                    <option value={3000000}>3000000</option>
-                    <option value={4000000}>4000000</option>
+                    <option value={0.01}>0.01</option>
+                    <option value={0.1}>0.1</option>
+                    <option value={1}>1</option>
+                    <option value={2}>2</option>
+                    <option value={5}>5</option>
+                    <option value={10}>10</option>
                 </select>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: '15px' }}>
@@ -184,7 +184,7 @@ const SideMenu: React.FC<SideMenuProps> = ({
                             <input
                                 type="range"
                                 min="0"
-                                max="15"
+                                max="10"
                                 value={moment}
                                 onChange={(e) => setMoment(parseFloat(e.target.value))}
                                 style={{ width: '100%' }}

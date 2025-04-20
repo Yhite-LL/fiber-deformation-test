@@ -1,105 +1,164 @@
+/* 重置 html 和 body 的基本样式 */
 html, body {
   min-height: 100%;
 }
 
 body {
+  /* 去除默认外边距 */
   margin: 0;
+  /* 隐藏溢出内容 */
   overflow: hidden;
+  /* 使用 flex 布局，使内容居中 */
   display: flex;
   place-items: center;
+  /* 设置最小宽度 */
   min-width: 320px;
+  /* 确保 body 至少占满视口高度 */
   min-height: 100vh;
 }
 
 #root {
+  /* 去除默认外边距 */
   margin: 0;
+  /* 文本居中 */
   text-align: center;
+  /* 设置字体 */
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  /* 设置行高 */
   line-height: 1.5;
+  /* 设置字体粗细 */
   font-weight: 400;
+  /* 占满视口高度和宽度 */
   height: 100vh;
   width: 100vw;
+  /* 颜色方案 */
   color-scheme: light dark;
+  /* 文本颜色 */
   color: rgba(255, 255, 255, 0.87);
+  /* 背景颜色 */
   background-color: #242424;
+  /* 字体合成设置 */
   font-synthesis: none;
+  /* 文本渲染优化 */
   text-rendering: optimizeLegibility;
+  /* 抗锯齿设置 */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 a {
+  /* 链接字体加粗 */
   font-weight: 500;
+  /* 链接颜色 */
   color: #646cff;
+  /* 去除默认下划线 */
   text-decoration: inherit;
 }
+
 a:hover {
+  /* 鼠标悬停时链接颜色 */
   color: #535bf2;
 }
 
 h1 {
+  /* 标题字体大小 */
   font-size: 3.2em;
+  /* 标题行高 */
   line-height: 1.1;
+  /* 绝对定位 */
   position: absolute;
+  /* 距离顶部 20px */
   top: 20px;
+  /* 距离左侧 20px */
   left: 20px;
+  /* 标题颜色 */
   color: white;
 }
 
 button {
+  /* 按钮圆角 */
   border-radius: 8px;
+  /* 按钮边框 */
   border: 1px solid transparent;
+  /* 按钮内边距 */
   padding: 0.6em 1.2em;
+  /* 按钮字体大小 */
   font-size: 1em;
+  /* 按钮字体加粗 */
   font-weight: 500;
+  /* 继承字体 */
   font-family: inherit;
+  /* 按钮背景颜色 */
   background-color: #1a1a1a;
+  /* 鼠标指针样式 */
   cursor: pointer;
+  /* 边框颜色过渡效果 */
   transition: border-color 0.25s;
 }
+
 button:hover {
+  /* 鼠标悬停时边框颜色 */
   border-color: #646cff;
 }
+
 button:focus,
 button:focus-visible {
+  /* 按钮聚焦时的外边框样式 */
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* 浅色主题样式 */
 @media (prefers-color-scheme: light) {
   :root {
+    /* 文本颜色 */
     color: #213547;
+    /* 背景颜色 */
     background-color: #ffffff;
   }
   a:hover {
+    /* 鼠标悬停时链接颜色 */
     color: #747bff;
   }
   button {
+    /* 按钮背景颜色 */
     background-color: #f9f9f9;
   }
 }
 
 .logo {
+  /* logo 高度 */
   height: 6em;
+  /* logo 内边距 */
   padding: 1.5em;
+  /* 启用硬件加速 */
   will-change: filter;
+  /* 过渡效果 */
   transition: filter 300ms;
 }
+
 .logo:hover {
+  /* 鼠标悬停时 logo 阴影效果 */
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
+  /* 鼠标悬停时 React logo 阴影效果 */
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
 
+/* logo 旋转动画 */
 @keyframes logo-spin {
   from {
+    /* 起始旋转角度 */
     transform: rotate(0deg);
   }
   to {
+    /* 结束旋转角度 */
     transform: rotate(360deg);
   }
 }
 
+/* 当用户没有设置减少动画时，对第二个 a 标签下的 logo 应用动画 */
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
@@ -107,30 +166,41 @@ button:focus-visible {
 }
 
 .card {
+  /* 卡片内边距 */
   padding: 2em;
 }
 
 .read-the-docs {
+  /* 特定文本颜色 */
   color: #888;
 }
 
 .App {
+  /* 使用 flex 布局 */
   display: flex;
-  flex:1;
-  height: 100vh; /* 确保 App 组件占据整个视口高度 */
+  /* 弹性伸缩 */
+  flex: 2;
+  /* 确保 App 组件占据整个视口高度 */
+  height: 100vh; 
 }
 
 .column {
+  /* 弹性伸缩 */
   flex: 1;
+  /* 列内边距 */
   padding: 10px;
 }
 
 .left-column {
-  background-color: #f0f0f0; /* 左列的背景颜色 */
-  flex:3; /* 设置宽度为 70% */
+  /* 左列背景颜色 */
+  background-color: #f0f0f0; 
+  /* 左列宽度占比 */
+  flex: 3; 
 }
 
 .right-column {
-  background-color: #ffffff; /* 右列的背景颜色 */
-  flex:2; /* 右列占 20% */
+  /* 右列背景颜色 */
+  background-color: #ffffff; 
+  /* 右列宽度占比 */
+  flex: 1; 
 }
