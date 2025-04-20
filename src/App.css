@@ -179,7 +179,11 @@ button:focus-visible {
   /* 使用 flex 布局 */
   display: flex;
   /* 弹性伸缩 */
+<<<<<<< HEAD
   flex: 2;
+=======
+  flex: 1;
+>>>>>>> d8d68625f8cb18d63b0f2794b3f085f0cd0385c7
   /* 确保 App 组件占据整个视口高度 */
   height: 100vh; 
 }
@@ -202,5 +206,9 @@ button:focus-visible {
   /* 右列背景颜色 */
   background-color: #ffffff; 
   /* 右列宽度占比 */
+<<<<<<< HEAD
   flex: 1; 
+=======
+  flex: 2; 
+>>>>>>> d8d68625f8cb18d63b0f2794b3f085f0cd0385c7
 }
